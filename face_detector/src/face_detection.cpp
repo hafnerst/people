@@ -60,6 +60,7 @@
 #include "sensor_msgs/image_encodings.h"
 #include "cv_bridge/cv_bridge.h"
 #include "tf/transform_listener.h"
+#include <tf/transform_broadcaster.h>
 #include "sensor_msgs/PointCloud.h"
 #include "geometry_msgs/Point32.h"
 
@@ -151,6 +152,7 @@ public:
   // in rviz at runtime (eg the alpha, display time, etc. can't be changed.)
   ros::Publisher cloud_pub_;
   ros::Publisher pos_array_pub_;
+  tf::TransformBroadcaster br_;
 
   // Display
   bool do_display_; /**< True/false display images with bounding boxes locally. */
@@ -681,6 +683,17 @@ private:
           {
             (*it).second = rpm;
           }
+          
+          tf::StampedTransform transform;
+          transform.stamp_ = header.stamp;
+          transform.frame_id_ = header.frame_id;
+          transform.child_frame_id_ = name_  + "_" + boost::lexical_cast<std::string>(pos_array.people[ipa].object_id);
+          transform.setOrigin( tf::Vector3(pos_array.people[ipa].pos.x, pos_array.people[ipa].pos.y, pos_array.people[ipa].pos.z) );
+          tf::Quaternion q;
+          q.setRPY(0.0, 0.0, 0.0);
+          transform.setRotation(q);
+          
+          br_.sendTransform(transform);
         }
         //      pos_lock.unlock();
 
