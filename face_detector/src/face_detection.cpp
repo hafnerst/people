@@ -688,7 +688,8 @@ private:
           transform.stamp_ = header.stamp;
           transform.frame_id_ = header.frame_id;
           transform.child_frame_id_ = name_  + "_" + boost::lexical_cast<std::string>(pos_array.people[ipa].object_id);
-          transform.setOrigin( tf::Vector3(pos_array.people[ipa].pos.x, pos_array.people[ipa].pos.y, pos_array.people[ipa].pos.z) );
+          //transform.setOrigin( tf::Vector3(pos_array.people[ipa].pos.z * -1.0, pos_array.people[ipa].pos.x, pos_array.people[ipa].pos.y));
+          transform.setOrigin( tf::Vector3(pos_array.people[ipa].pos.x, pos_array.people[ipa].pos.y, pos_array.people[ipa].pos.z));
           tf::Quaternion q;
           q.setRPY(0.0, 0.0, 0.0);
           transform.setRotation(q);
@@ -727,6 +728,7 @@ private:
           p.x = one_face->center3d.x;
           p.y = one_face->center3d.y;
           p.z = one_face->center3d.z;
+          
           cloud.points.push_back(p);
           cloud.channels[0].values.push_back(1.0f);
 

@@ -213,6 +213,7 @@ void Faces::faceDetectionThreadDisparity(uint i)
         cam_model_->projectDisparityTo3d(cv::Point2d(one_face.box2d.width, 0.0), avg_disp, p3_2);
         one_face.width3d = fabs(p3_2.x - p3_1.x);
         cam_model_->projectDisparityTo3d(one_face.center2d, avg_disp, one_face.center3d);
+        std::cout << "width: " << one_face.width3d << std::endl;
         if (one_face.center3d.z > max_face_z_m_ || one_face.width3d < face_size_min_m_ || one_face.width3d > face_size_max_m_)
         {
           one_face.status = "bad";
